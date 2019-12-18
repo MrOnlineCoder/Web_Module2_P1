@@ -39,7 +39,7 @@ let func = function(a,b,c) {
 ```javascript
 let a = [10,-2,8,7,-11];
 
-a.filter(item => a > 0);
+a.filter(item => item > 0);
 
 //рівносильно
 
