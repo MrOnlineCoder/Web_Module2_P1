@@ -1,0 +1,151 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML CSS JS - Module 2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <style>
+        .least-profit td {
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Модульна контрольна робота №2, Завдання 3 + 4 + 5</h1>
+        <small>студента 1-го курсу, Когута Нікіти Ігоровича</small>
+        <br>
+        <small>варіант <b>4</b></small>
+        <hr>
+        <div>
+           <table class="table table-hover">
+               <thead>
+                   <th>#</th>
+                   <th>Номер каси</th>
+                   <th>Операція</th>
+                   <th>Сума</th>
+               </thead>
+               <tbody id="render_place">
+
+               </tbody>
+           </table>
+
+           <hr>
+           <button class="btn btn-warning" id="actionButton">
+               Визначити найбільш неприбуткову касу
+           </button>
+        </div>
+
+    </div>
+
+    <script>
+        const OPERATION_DEPOSIT = false;
+        const OPERATION_WITHDRAW = true;
+
+        const CashboxOperations = [
+            {
+                id: 1374,
+                cash_id: 2,
+                value: 1500,
+                type: OPERATION_DEPOSIT 
+            },
+            {
+                id: 2731,
+                cash_id: 1,
+                value: 230,
+                type: OPERATION_DEPOSIT
+            },
+            {
+                id: 8923,
+                cash_id: 2,
+                value: 988,
+                type: OPERATION_WITHDRAW
+            },
+            {
+                id: 6374,
+                cash_id: 3,
+                value: 50,
+                type: OPERATION_DEPOSIT
+            },
+            {
+                id: 661,
+                cash_id: 1,
+                value: 839,
+                type: OPERATION_WITHDRAW
+            }
+        ];
+
+        //
+        // Render table with operations to the page
+        //
+        function render_table(options) {
+            if (!options) options = {};
+
+            const target = document.getElementById('render_place');
+
+            let render_data = '';
+
+            const DEPOSIT_HTML = '<span class="text-success">Отримання</span>';
+            const WITHDRAW_HTML = '<span class="text-danger">Видача</span>';
+
+            CashboxOperations.forEach((op) => {
+
+                //Refer to action_handler() 
+                //This is ID of the cash machine that is the least profitable
+                if (options.least_profit_id 
+                    && op.cash_id == options.least_profit_id) {
+                    render_data += '<tr class="table-danger least-profit">';
+                } else {
+                    render_data += '<tr>';
+                }
+
+                render_data += `
+                    <td>${op.id}</td>
+                    <td>${op.cash_id}</td>
+                    <td>${op.type == OPERATION_DEPOSIT ? DEPOSIT_HTML : WITHDRAW_HTML}</td>
+                    <td>${op.value} грн.</td>`;
+
+                render_data += '</tr>'
+            });
+            
+            target.innerHTML = render_data;
+        }
+
+        function action_handler(evt) {
+            let mapping = {};
+
+            CashboxOperations.forEach((op) => {
+                const delta = op.type == OPERATION_DEPOSIT ? op.value : -op.value;
+                
+                if (!mapping[op.cash_id]) {
+                    mapping[op.cash_id] = delta;
+                } else {
+                    mapping[op.cash_id] += delta;
+                }
+            });
+
+            const pairs = Object.entries(mapping);
+
+            const minPair = pairs.reduce((_min,item) => item[1] < _min[1] ? item : _min);
+
+            //Re-render table with new data
+            render_table({
+                least_profit_id: minPair[0]
+            });
+        }
+
+        function add_action() {
+            document.getElementById('actionButton').onclick = action_handler;
+        }
+
+        render_table();
+        add_action();
+    </script>
+</body>
+
+</html>

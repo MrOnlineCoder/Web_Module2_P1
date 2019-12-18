@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HTML CSS JS - Module 2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Модульна контрольна робота №2, Завдання 2</h1>
+        <small>студента 1-го курсу, Когута Нікіти Ігоровича</small>
+        <br>
+        <small>варіант <b>4</b></small>
+        <hr>
+        <div>
+            <label>
+                Українські гривні:
+                <input type="number" class="form-control" placeholder="1.24" id="uah">
+            </label>
+            <label>
+                Мексиканське песо:
+                <input type="number" class="form-control" placeholder="1" id="peso">
+            </label>
+            <button class="btn btn-primary" id="convert_button">
+                Конвертувати песо в гривні
+            </button>
+            <button class="btn btn-warning" id="convert2_button">
+                Конвертувати гривні в песо
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        const UAH_PER_PESO = 1.24;
+
+        const pesoInput = document.getElementById('peso');
+        const uahInput = document.getElementById('uah');
+
+        function roundTwoDecimals(v) {
+            return Math.round(v * 100) / 100;
+        }
+
+        document.getElementById('convert_button').onclick = (ev) => {
+            const peso = parseFloat(pesoInput.value);
+
+            if (!peso) return;
+
+            uahInput.value = roundTwoDecimals(peso * UAH_PER_PESO);
+        };
+
+        document.getElementById('convert2_button').onclick = (ev) => {
+            const uah = parseFloat(uahInput.value);
+
+            if (!uah) return;
+
+            pesoInput.value = roundTwoDecimals(uah / UAH_PER_PESO);
+        };
+    </script>
+</body>
+
+</html>
